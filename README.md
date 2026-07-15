@@ -43,7 +43,7 @@ This application helps TTB compliance agents verify that alcohol beverage labels
    cp .env.example .env.local
    ```
 
-   Defaults need **no API key**. To use OpenAI instead:
+   Defaults need **no API key**. This free mode uses browser OCR and can be less accurate/slower on hard images. To use OpenAI instead:
 
    ```
    VERIFICATION_ENGINE=openai
@@ -114,7 +114,7 @@ label-verify/
 - Better on glare, angles, and small warning text
 - Results UI shows which engine was used (`Tesseract OCR` or `GPT-4o`)
 
-**Limitation:** OCR is weaker than GPT-4o on imperfect photos. Prefer clear label images or `auto`/`openai` for demos that need higher accuracy.
+**Limitation:** No-key OCR mode is weaker than GPT-4o on imperfect photos and may take longer on complex labels. Prefer clear label images or `auto`/`openai` for demos that need higher accuracy.
 
 ### Comparison Logic
 

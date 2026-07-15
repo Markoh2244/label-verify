@@ -99,23 +99,25 @@ export default function DashboardPage() {
 
       try {
         const file = files[i];
-        const imageUrl = await fileToBase64(file);
 
         // OCR in the browser — avoids Vercel serverless 504 timeouts
         const extractedData = await extractLabelInBrowser(file);
 
-        // Only send the image when the server may run OpenAI (large payloads can fail on Vercel)
+        // Only send base64 image payloads when server-side OpenAI may run.
+        // Keeping request bodies small prevents Vercel payload/time issues.
         const serverVision =
           process.env.NEXT_PUBLIC_VERIFICATION_ENGINE === 'openai' ||
           process.env.NEXT_PUBLIC_VERIFICATION_ENGINE === 'auto';
+        const imageUrl = serverVision ? await fileToBase64(file) : undefined;
+        const localPreviewUrl = !serverVision ? await fileToBase64(file) : imageUrl;
 
         const response = await fetch('/api/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             extractedData,
-            imageUrl,
             ...(serverVision ? { image: imageUrl } : {}),
+            ...(serverVision ? { imageUrl } : {}),
             applicationData,
             fileName: file.name,
             id: crypto.randomUUID(),
@@ -138,6 +140,9 @@ export default function DashboardPage() {
           throw new Error(payload.error || 'Verification failed');
         }
 
+        if (!payload.imageUrl && localPreviewUrl) {
+          payload.imageUrl = localPreviewUrl;
+        }
         newResults.push(payload);
         setResults([...newResults]);
       } catch (err) {
