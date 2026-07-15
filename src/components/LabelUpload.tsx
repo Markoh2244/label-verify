@@ -21,7 +21,8 @@ export function LabelUpload({ files, onFilesChange, disabled }: LabelUploadProps
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
-      'image/*': ['.png', '.jpg', '.jpeg', '.webp', '.gif'],
+      'image/*': ['.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg'],
+      'image/svg+xml': ['.svg'],
     },
     disabled,
   });
@@ -65,7 +66,7 @@ export function LabelUpload({ files, onFilesChange, disabled }: LabelUploadProps
               Drag and drop, or click to browse
             </p>
             <p className="mt-2 text-sm text-[var(--base)]">
-              PNG, JPG, JPEG, WebP — single or batch upload supported
+              PNG, JPG, JPEG, WebP, SVG — single or batch upload supported
             </p>
           </div>
         </div>

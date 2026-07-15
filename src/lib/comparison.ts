@@ -280,11 +280,63 @@ function createNetContentsComparison(
 }
 
 export function determineOverallStatus(comparisons: FieldComparison[]): 'pass' | 'fail' | 'review' {
-  const hasMissing = comparisons.some(c => c.matchType === 'missing');
-  const hasMismatch = comparisons.some(c => c.matchType === 'mismatch');
-  const hasFuzzy = comparisons.some(c => c.matchType === 'fuzzy');
+  // Overridden fields count as accepted matches
+  const active = comparisons.filter((c) => c.matchType !== 'overridden');
+  const hasMissing = active.some((c) => c.matchType === 'missing');
+  const hasMismatch = active.some((c) => c.matchType === 'mismatch');
+  const hasFuzzy = active.some((c) => c.matchType === 'fuzzy');
 
   if (hasMismatch || hasMissing) return 'fail';
   if (hasFuzzy) return 'review';
   return 'pass';
+}
+
+/** Agent accepts a field as matching despite OCR/automation disagreement (Dave's "judgment" case). */
+export function applyFieldOverride(
+  comparison: FieldComparison,
+  reason?: string
+): FieldComparison {
+  if (comparison.match && comparison.matchType !== 'fuzzy') {
+    return comparison;
+  }
+
+  const previousMatchType =
+    comparison.matchType === 'overridden'
+      ? comparison.override?.previousMatchType || 'mismatch'
+      : comparison.matchType;
+
+  return {
+    ...comparison,
+    match: true,
+    matchType: 'overridden',
+    notes: reason?.trim()
+      ? `Agent override: ${reason.trim()}`
+      : 'Accepted by agent — automated result overridden',
+    override: {
+      previousMatchType: previousMatchType as 'exact' | 'fuzzy' | 'missing' | 'mismatch',
+      reason: reason?.trim() || undefined,
+      at: new Date().toISOString(),
+    },
+  };
+}
+
+/** Undo an agent override and restore the prior automated status. */
+export function clearFieldOverride(comparison: FieldComparison): FieldComparison {
+  if (comparison.matchType !== 'overridden' || !comparison.override) {
+    return comparison;
+  }
+
+  const previous = comparison.override.previousMatchType;
+  return {
+    ...comparison,
+    match: previous === 'exact' || previous === 'fuzzy',
+    matchType: previous,
+    notes:
+      previous === 'fuzzy'
+        ? 'Minor formatting differences (e.g., capitalization)'
+        : previous === 'missing'
+          ? `${comparison.label} not found on label`
+          : undefined,
+    override: undefined,
+  };
 }

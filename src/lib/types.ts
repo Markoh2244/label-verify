@@ -36,8 +36,14 @@ export interface FieldComparison {
   applicationValue: string;
   extractedValue: string | null;
   match: boolean;
-  matchType: 'exact' | 'fuzzy' | 'missing' | 'mismatch';
+  matchType: 'exact' | 'fuzzy' | 'missing' | 'mismatch' | 'overridden';
   notes?: string;
+  /** Set when an agent manually accepts a field the system flagged */
+  override?: {
+    previousMatchType: 'exact' | 'fuzzy' | 'missing' | 'mismatch';
+    reason?: string;
+    at: string;
+  };
 }
 
 export interface VerificationResult {
@@ -49,6 +55,8 @@ export interface VerificationResult {
   overallStatus: 'pass' | 'fail' | 'review';
   processingTime: number;
   timestamp: Date;
+  /** How text was extracted from the label image */
+  extractionEngine?: 'tesseract' | 'openai';
 }
 
 export interface BatchVerificationState {

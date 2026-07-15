@@ -33,7 +33,7 @@ export default function SignInPage() {
         <div className="card-header">
           <h2 className="text-xl font-bold text-[var(--ink)]">Agent sign in</h2>
           <p className="mt-1 text-sm text-[var(--base-dark)]">
-            Sign in to access the TTB label verification workspace
+            Sign in to the Alcohol and Tobacco Tax and Trade Bureau label verification workspace
           </p>
         </div>
 

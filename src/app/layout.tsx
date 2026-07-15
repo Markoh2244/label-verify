@@ -15,9 +15,9 @@ const robotoMono = Roboto_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "TTB Label Verify | U.S. Department of the Treasury",
+  title: "Label Verify | Alcohol and Tobacco Tax and Trade Bureau (TTB)",
   description:
-    "AI-powered alcohol beverage label verification for TTB compliance agents. Prototype for the U.S. Department of the Treasury.",
+    "AI-powered alcohol beverage label verification prototype for TTB compliance agents. Alcohol and Tobacco Tax and Trade Bureau, U.S. Department of the Treasury.",
 };
 
 export default function RootLayout({

@@ -6,7 +6,6 @@ import { LabelUpload, ApplicationForm, VerificationResults } from '@/components'
 import { ApplicationData, VerificationResult, GOVERNMENT_WARNING_TEXT, LABEL_FIELDS } from '@/lib/types';
 import { clearDemoSession, getDemoUser, isDemoAuthenticated } from '@/lib/demo-auth';
 import { BrandMark } from '@/components/auth/BrandMark';
-import { UsaBanner } from '@/components/UsaBanner';
 import {
   AlertCircle,
   ArrowRight,
@@ -172,38 +171,30 @@ export default function DashboardPage() {
 
   return (
     <div className="app-shell min-h-screen flex flex-col">
-      <UsaBanner />
+      <div className="site-header__bar" />
       <header className="site-header sticky top-0 z-20">
-        <div className="mx-auto flex min-h-[4.5rem] max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
+        <div className="mx-auto flex min-h-[4.75rem] max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8">
           <BrandMark
             href="/dashboard"
-            subtitle="Agent workspace"
+            subtitle="Label Verify · Agent workspace"
             size="md"
-            variant="light"
+            variant="dark"
           />
 
           <div className="flex flex-wrap items-center justify-end gap-2 sm:gap-3">
-            <div className="hidden items-center gap-2 border border-white/25 bg-white/10 px-3 py-2 sm:flex">
-              <User className="h-4 w-4 text-[var(--gold)]" />
-              <span className="text-sm font-medium text-white">{userName}</span>
+            <div className="hidden items-center gap-2 border border-[var(--border)] bg-[var(--base-lightest)] px-3 py-2 sm:flex">
+              <User className="h-4 w-4 text-[var(--primary)]" />
+              <span className="text-sm font-medium text-[var(--ink)]">{userName}</span>
             </div>
 
             {(results.length > 0 || files.length > 0) && (
-              <button
-                type="button"
-                onClick={handleReset}
-                className="inline-flex items-center gap-2 border-2 border-white px-3 py-2 text-sm font-bold text-white hover:bg-white/10"
-              >
+              <button type="button" onClick={handleReset} className="btn-secondary !py-2 !px-3 !text-sm">
                 <RotateCcw className="h-4 w-4" />
                 <span className="hidden sm:inline">New verification</span>
               </button>
             )}
 
-            <button
-              type="button"
-              onClick={handleSignOut}
-              className="inline-flex items-center gap-2 bg-[var(--gold)] px-3 py-2 text-sm font-bold text-[var(--primary-darker)] hover:bg-[var(--gold-dark)]"
-            >
+            <button type="button" onClick={handleSignOut} className="btn-primary !py-2 !px-3 !text-sm">
               <LogOut className="h-4 w-4" />
               <span className="hidden sm:inline">Sign out</span>
             </button>
@@ -212,15 +203,16 @@ export default function DashboardPage() {
       </header>
 
       <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6 lg:px-8">
-        <section className="mb-8 border-b-4 border-[var(--primary)] pb-6">
+        <section className="mb-8 border-b border-[var(--border)] pb-6">
           <p className="text-sm font-bold uppercase tracking-wide text-[var(--primary)]">
-            Alcohol and Tobacco Tax and Trade Bureau
+            Certificate of Label Approval (COLA) review
           </p>
           <h1 className="mt-1 text-2xl font-bold text-[var(--ink)] sm:text-3xl">
             Verify label against application
           </h1>
           <p className="mt-2 max-w-2xl text-[var(--base-dark)]">
-            Upload label artwork and enter COLA application fields to receive an instant comparison report.
+            Upload label artwork and enter COLA application fields to receive an instant comparison
+            report—helping TTB agents clear routine matching work faster.
           </p>
         </section>
 
@@ -246,11 +238,43 @@ export default function DashboardPage() {
             <div className="p-5 sm:p-6">
               <LabelUpload files={files} onFilesChange={setFiles} disabled={isProcessing} />
               <p className="mt-4 text-sm text-[var(--base-dark)]">
-                Tip: Download the{' '}
+                Sample labels: download from{' '}
                 <a href="/samples/old-tom-distillery.svg" className="font-bold text-[var(--primary)] underline" download>
-                  sample label
+                  Old Tom (pass)
+                </a>
+                ,{' '}
+                <a href="/samples/old-tom-wrong-abv.svg" className="font-bold text-[var(--primary)] underline" download>
+                  wrong ABV
+                </a>
+                ,{' '}
+                <a href="/samples/old-tom-bad-warning.svg" className="font-bold text-[var(--primary)] underline" download>
+                  bad warning
+                </a>
+                ,{' '}
+                <a href="/samples/stones-throw-rye.svg" className="font-bold text-[var(--primary)] underline" download>
+                  Stone&apos;s Throw
+                </a>
+                ,{' '}
+                <a href="/samples/valley-vineyards-cabernet.svg" className="font-bold text-[var(--primary)] underline" download>
+                  wine
+                </a>
+                ,{' '}
+                <a href="/samples/harbor-hop-ipa.svg" className="font-bold text-[var(--primary)] underline" download>
+                  beer
+                </a>
+                ,{' '}
+                <a href="/samples/north-star-gin.svg" className="font-bold text-[var(--primary)] underline" download>
+                  gin
+                </a>
+                , or{' '}
+                <a href="/samples/casa-del-sol-missing-warning.svg" className="font-bold text-[var(--primary)] underline" download>
+                  missing warning
+                </a>
+                . See{' '}
+                <a href="/samples/README.md" className="font-bold text-[var(--primary)] underline" target="_blank" rel="noreferrer">
+                  samples/README.md
                 </a>{' '}
-                and use &quot;Load sample application&quot; for a quick test.
+                for application field values.
               </p>
             </div>
           </section>
@@ -316,18 +340,29 @@ export default function DashboardPage() {
                 isProcessing={isProcessing}
                 currentIndex={currentIndex}
                 totalFiles={files.length}
+                onResultsChange={setResults}
               />
             </div>
           </section>
         )}
       </main>
 
-      <footer className="mt-auto border-t border-[var(--border)] bg-white">
-        <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-4 py-5 text-center sm:flex-row sm:text-left sm:px-6 lg:px-8">
-          <p className="text-sm text-[var(--base-dark)]">
-            U.S. Department of the Treasury · TTB Label Verification Prototype
+      <footer className="site-footer mt-auto">
+        <div className="mx-auto flex max-w-6xl flex-col gap-3 px-4 py-6 sm:flex-row sm:items-start sm:justify-between sm:px-6 lg:px-8">
+          <div>
+            <p className="font-bold">Alcohol and Tobacco Tax and Trade Bureau</p>
+            <p className="mt-1 text-sm text-white/75">U.S. Department of the Treasury</p>
+            <p className="mt-3 text-sm text-white/65">
+              Label Verify · Demonstration prototype · Not connected to COLA
+            </p>
+          </div>
+          <p className="text-xs text-white/55 max-w-xs sm:text-right">
+            This is not an official TTB.gov website. For information about label approvals, visit{' '}
+            <a href="https://www.ttb.gov/" target="_blank" rel="noreferrer">
+              ttb.gov
+            </a>
+            .
           </p>
-          <p className="text-xs text-[var(--base)]">Not connected to COLA. For demonstration only.</p>
         </div>
       </footer>
     </div>

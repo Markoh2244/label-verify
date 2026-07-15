@@ -7,6 +7,12 @@ interface BrandMarkProps {
   href?: string;
 }
 
+/**
+ * TTB-style agency lockup, matching ttb.gov hierarchy:
+ * 1) Alcohol and Tobacco Tax and Trade Bureau (agency)
+ * 2) Product / tool name
+ * 3) Parent: U.S. Department of the Treasury
+ */
 export function BrandMark({
   subtitle,
   size = 'md',
@@ -14,40 +20,53 @@ export function BrandMark({
   href = '/',
 }: BrandMarkProps) {
   const sizes = {
-    sm: { seal: 'h-8 w-8', title: 'text-sm', agency: 'text-[10px]', sub: 'text-[10px]' },
-    md: { seal: 'h-10 w-10', title: 'text-base', agency: 'text-xs', sub: 'text-xs' },
-    lg: { seal: 'h-12 w-12', title: 'text-lg', agency: 'text-sm', sub: 'text-sm' },
+    sm: {
+      seal: 'h-10 w-10',
+      agency: 'text-[11px] leading-tight',
+      title: 'text-sm',
+      parent: 'text-[10px]',
+    },
+    md: {
+      seal: 'h-12 w-12',
+      agency: 'text-xs leading-snug sm:text-sm',
+      title: 'text-base',
+      parent: 'text-[11px]',
+    },
+    lg: {
+      seal: 'h-14 w-14',
+      agency: 'text-sm leading-snug sm:text-base',
+      title: 'text-lg',
+      parent: 'text-xs',
+    },
   };
   const s = sizes[size];
-  const titleClass = variant === 'light' ? 'text-white' : 'text-[var(--ink)]';
-  const agencyClass = variant === 'light' ? 'text-[var(--gold)]' : 'text-[var(--primary)]';
-  const subClass = variant === 'light' ? 'text-white/75' : 'text-[var(--base-dark)]';
+  const agencyClass = variant === 'light' ? 'text-white' : 'text-[var(--ink)]';
+  const titleClass = variant === 'light' ? 'text-white/90' : 'text-[var(--primary)]';
+  const parentClass = variant === 'light' ? 'text-white/70' : 'text-[var(--base-dark)]';
 
   return (
-    <Link href={href} className="inline-flex items-center gap-3 group">
-      <TreasurySeal className={`${s.seal} shrink-0`} light={variant === 'light'} />
+    <Link href={href} className="inline-flex items-center gap-3 group min-w-0">
+      <TtbSeal className={`${s.seal} shrink-0`} light={variant === 'light'} />
       <div className="min-w-0">
-        <p className={`${s.agency} font-bold uppercase tracking-wide ${agencyClass}`}>
-          U.S. Department of the Treasury
+        <p className={`${s.agency} font-bold ${agencyClass}`}>
+          Alcohol and Tobacco Tax and Trade Bureau
         </p>
         <p className={`${s.title} font-bold leading-tight ${titleClass}`}>
-          TTB Label Verify
+          {typeof subtitle === 'string' ? subtitle : 'Label Verify'}
         </p>
-        {(subtitle ?? true) && (
-          <p className={`${s.sub} ${subClass}`}>
-            {typeof subtitle === 'string'
-              ? subtitle
-              : 'Alcohol and Tobacco Tax and Trade Bureau'}
-          </p>
-        )}
+        <p className={`${s.parent} ${parentClass}`}>
+          U.S. Department of the Treasury
+        </p>
       </div>
     </Link>
   );
 }
 
-function TreasurySeal({ className, light }: { className?: string; light?: boolean }) {
-  const fill = light ? '#ffbe2e' : '#005ea2';
-  const stroke = light ? '#ffffff' : '#162e51';
+/** Circular TTB lettermark inspired by bureau identity on ttb.gov */
+function TtbSeal({ className, light }: { className?: string; light?: boolean }) {
+  const fill = light ? '#ffffff' : '#005ea2';
+  const text = light ? '#162e51' : '#ffffff';
+  const ring = light ? '#ffffff' : '#1a4480';
 
   return (
     <svg
@@ -57,12 +76,20 @@ function TreasurySeal({ className, light }: { className?: string; light?: boolea
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      <circle cx="32" cy="32" r="30" fill={fill} stroke={stroke} strokeWidth="2" />
-      <circle cx="32" cy="32" r="24" fill="none" stroke={stroke} strokeWidth="1.25" opacity="0.7" />
-      <path
-        d="M32 14 L36 26 H48 L38 34 L42 46 L32 38 L22 46 L26 34 L16 26 H28 Z"
-        fill={stroke}
-      />
+      <circle cx="32" cy="32" r="31" fill={fill} />
+      <circle cx="32" cy="32" r="27" fill="none" stroke={ring} strokeWidth="1.5" opacity="0.35" />
+      <text
+        x="32"
+        y="38"
+        textAnchor="middle"
+        fill={text}
+        fontSize="18"
+        fontWeight="700"
+        fontFamily="Public Sans, Arial, sans-serif"
+        letterSpacing="1"
+      >
+        TTB
+      </text>
     </svg>
   );
 }

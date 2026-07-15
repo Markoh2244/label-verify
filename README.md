@@ -6,11 +6,12 @@ AI-powered alcohol beverage label verification tool for TTB compliance review.
 
 ## Overview
 
-This application helps TTB compliance agents verify that alcohol beverage labels match their submitted COLA (Certificate of Label Approval) applications. It uses OpenAI's GPT-4o vision model to extract text from label images and compare them against application data.
+This application helps TTB compliance agents verify that alcohol beverage labels match their submitted COLA (Certificate of Label Approval) applications. By default it uses **Tesseract.js** (free local OCR, no API key). Optionally it can use OpenAI GPT-4o when a key is configured.
 
 ### Key Features
 
-- **Fast Processing**: AI extracts label data in under 5 seconds per label
+- **No API key required by default**: Tesseract.js OCR runs locally
+- **Optional GPT-4o**: Set `OPENAI_API_KEY` and `VERIFICATION_ENGINE=openai` (or `auto`) for higher accuracy
 - **Batch Upload**: Process multiple labels simultaneously for efficiency
 - **Smart Matching**: Handles minor formatting differences (capitalization, spacing) while flagging actual mismatches
 - **Government Warning Verification**: Strict validation of the required warning statement format
@@ -20,9 +21,9 @@ This application helps TTB compliance agents verify that alcohol beverage labels
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or yarn
-- OpenAI API key with GPT-4o access
+- (Optional) OpenAI API key if you want GPT-4o instead of OCR
 
 ### Installation
 
@@ -37,13 +38,22 @@ This application helps TTB compliance agents verify that alcohol beverage labels
    npm install
    ```
 
-3. **Configure environment**
+3. **Configure environment (optional)**
    ```bash
    cp .env.example .env.local
    ```
-   
-   Edit `.env.local` and add your OpenAI API key:
+
+   Defaults need **no API key**. To use OpenAI instead:
+
    ```
+   VERIFICATION_ENGINE=openai
+   OPENAI_API_KEY=sk-your-actual-api-key
+   ```
+
+   Or use OCR first with OpenAI only when confidence is low:
+
+   ```
+   VERIFICATION_ENGINE=auto
    OPENAI_API_KEY=sk-your-actual-api-key
    ```
 
@@ -94,10 +104,17 @@ label-verify/
 
 ### Label Extraction
 
-The application uses OpenAI's GPT-4o vision model to:
-- Read text from label images regardless of orientation or lighting
-- Extract structured data for each required field
-- Handle partial visibility and image quality issues
+**Default — Tesseract.js + Sharp**
+- Preprocesses images (resize, grayscale, contrast)
+- Runs free open-source OCR (no API key)
+- Parses brand, ABV, net contents, producer, and government warning with heuristics
+
+**Optional — OpenAI GPT-4o**
+- Set `VERIFICATION_ENGINE=openai` or `auto` with `OPENAI_API_KEY`
+- Better on glare, angles, and small warning text
+- Results UI shows which engine was used (`Tesseract OCR` or `GPT-4o`)
+
+**Limitation:** OCR is weaker than GPT-4o on imperfect photos. Prefer clear label images or `auto`/`openai` for demos that need higher accuracy.
 
 ### Comparison Logic
 
@@ -125,13 +142,30 @@ The government warning statement receives special treatment:
 2. **Standard label formats**: Labels follow typical alcohol beverage label conventions
 3. **English language**: Text extraction optimized for English labels
 
-### Trade-offs
+### Demo trade-off: free OCR vs. paid vision APIs
 
-1. **Cloud API vs. Local Processing**: Using OpenAI's API provides better accuracy than local OCR but requires internet connectivity. The stakeholder notes mentioned firewall concerns - for production, consider self-hosted alternatives.
+This prototype defaults to **Tesseract.js** so reviewers can run and evaluate the product **without purchasing API keys** or wiring cloud billing. That was an intentional demo constraint, not a recommendation for production at TTB scale.
 
-2. **Processing Speed vs. Accuracy**: Using `gpt-4o` with `detail: high` provides best accuracy but takes 2-4 seconds per label. Could use `detail: low` for faster but less accurate results.
+**What we give up with free local OCR:**
+- Lower accuracy on imperfect photos (glare, odd angles, small government-warning text)
+- More false mismatches / “missing field” results that agents must override by hand
+- Less reliable structured extraction (brand vs. producer vs. class/type) than a multimodal model
+- Harder to hit the stakeholder **~5 second** usability bar consistently on difficult labels
 
-3. **Fuzzy Matching Threshold**: Current implementation uses simple normalization. More sophisticated fuzzy matching (Levenshtein distance) could be added but may introduce false positives.
+**What a real-world budget would buy:**
+- Switching `VERIFICATION_ENGINE` to `openai` (or `auto`) with an `OPENAI_API_KEY` measurably improves field extraction and warning-statement checks
+- With procurement funding, the same architecture could use other commercial or FedRAMP-minded vision APIs, or a self-hosted VLM (e.g. via Ollama / agency-approved hosting) to address the network/firewall concerns raised in discovery
+- Paid vision models are the clearer path to the accuracy and speed agents need day-to-day; free OCR is suitable for proving UX and workflow, not for replacing manual review at volume
+
+In short: **Tesseract keeps the demo free and deployable; API-backed (or approved self-hosted) vision is what we’d use in production once budget and compliance allow.**
+
+### Other trade-offs
+
+1. **Cloud API vs. local / self-hosted**: Cloud APIs are simplest for a prototype, but production under Treasury may require approved hosting and limited outbound domains—plan for that early.
+
+2. **Processing speed vs. accuracy**: `gpt-4o` with `detail: high` is typically strong within a few seconds per label; OCR can be faster on clean images but fails more often on the hard cases Sarah and Jenny described.
+
+3. **Fuzzy matching threshold**: Current matching uses simple normalization. Stronger fuzzy matching (e.g. Levenshtein) could reduce false fails but risks false passes—agent override exists for judgment calls either way.
 
 ## Testing
 
@@ -145,9 +179,11 @@ As suggested in the requirements, AI image generation tools work well for creati
 Prompt example:
 > "A bourbon whiskey bottle label for 'OLD TOM DISTILLERY' showing: Kentucky Straight Bourbon Whiskey, 45% Alc./Vol., 750 mL, with a vintage distillery illustration"
 
+Sample SVG labels are also included under `public/samples/` — see `public/samples/README.md` for application field values.
+
 ### Sample Test Data
 
-Click "Fill sample data" in the application to populate the form with:
+Click "Load sample application" in the form to populate:
 - Brand Name: OLD TOM DISTILLERY
 - Class/Type: Kentucky Straight Bourbon Whiskey
 - Alcohol Content: 45% Alc./Vol. (90 Proof)
@@ -172,7 +208,7 @@ npm run build
 vercel deploy
 ```
 
-Remember to set the `OPENAI_API_KEY` environment variable in your deployment settings.
+Defaults work with Tesseract only. For GPT-4o, set `OPENAI_API_KEY` and optionally `VERIFICATION_ENGINE=openai` or `auto` in the deployment environment.
 
 ### Docker
 
@@ -193,4 +229,5 @@ This is a prototype for demonstration purposes.
 
 ---
 
-Built with Next.js, TypeScript, Tailwind CSS, and OpenAI GPT-4o Vision.
+Built with Next.js, TypeScript, Tailwind CSS, Tesseract.js (default), and optional OpenAI GPT-4o Vision.
+

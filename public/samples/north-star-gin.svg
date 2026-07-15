@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#edf2f4"/>
+      <stop offset="100%" stop-color="#d9e2e8"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <rect x="40" y="40" width="520" height="720" fill="none" stroke="#2b2d42" stroke-width="2"/>
+  <text x="300" y="130" text-anchor="middle" fill="#8d99ae" font-family="Georgia, serif" font-size="12" letter-spacing="5">HANDCRAFTED</text>
+  <text x="300" y="220" text-anchor="middle" fill="#2b2d42" font-family="Georgia, serif" font-size="40" font-weight="bold">NORTH STAR</text>
+  <text x="300" y="270" text-anchor="middle" fill="#2b2d42" font-family="Georgia, serif" font-size="28" letter-spacing="8">GIN</text>
+  <line x1="200" y1="300" x2="400" y2="300" stroke="#8d99ae" stroke-width="1"/>
+  <text x="300" y="350" text-anchor="middle" fill="#4a4e69" font-family="Georgia, serif" font-size="16" font-style="italic">London Dry Gin</text>
+  <text x="300" y="430" text-anchor="middle" fill="#2b2d42" font-family="Arial, sans-serif" font-size="26" font-weight="bold">40% Alc./Vol.</text>
+  <text x="300" y="465" text-anchor="middle" fill="#8d99ae" font-family="Arial, sans-serif" font-size="14">(80 Proof)</text>
+  <text x="300" y="530" text-anchor="middle" fill="#4a4e69" font-family="Arial, sans-serif" font-size="20">750 mL</text>
+  <text x="300" y="590" text-anchor="middle" fill="#8d99ae" font-family="Arial, sans-serif" font-size="12">Distilled and Bottled by</text>
+  <text x="300" y="615" text-anchor="middle" fill="#2b2d42" font-family="Arial, sans-serif" font-size="14" font-weight="bold">North Star Spirits LLC</text>
+  <text x="300" y="640" text-anchor="middle" fill="#8d99ae" font-family="Arial, sans-serif" font-size="12">Chicago, Illinois 60601</text>
+  <rect x="50" y="665" width="500" height="95" fill="#2b2d42"/>
+  <text x="300" y="688" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="8.5" font-weight="bold">
+    <tspan x="300" dy="0">GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink</tspan>
+    <tspan x="300" dy="11">alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption</tspan>
+    <tspan x="300" dy="11">of alcoholic beverages impairs your ability to drive a car or operate machinery, and may</tspan>
+    <tspan x="300" dy="11">cause health problems.</tspan>
+  </text>
+</svg>

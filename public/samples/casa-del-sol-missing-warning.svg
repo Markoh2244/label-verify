@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#5c4033"/>
+      <stop offset="100%" stop-color="#2c1810"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <rect x="30" y="30" width="540" height="740" fill="none" stroke="#d4a373" stroke-width="2"/>
+  <text x="300" y="140" text-anchor="middle" fill="#d4a373" font-family="Georgia, serif" font-size="14" letter-spacing="4">IMPORTED</text>
+  <text x="300" y="230" text-anchor="middle" fill="#f5ebe0" font-family="Georgia, serif" font-size="36" font-weight="bold">CASA DEL SOL</text>
+  <text x="300" y="290" text-anchor="middle" fill="#d4a373" font-family="Georgia, serif" font-size="20" font-style="italic">Repos Blanco</text>
+  <text x="300" y="380" text-anchor="middle" fill="#f5ebe0" font-family="Arial, sans-serif" font-size="26" font-weight="bold">40% Alc./Vol.</text>
+  <text x="300" y="420" text-anchor="middle" fill="#d4a373" font-family="Arial, sans-serif" font-size="15">(80 Proof)</text>
+  <text x="300" y="490" text-anchor="middle" fill="#f5ebe0" font-family="Arial, sans-serif" font-size="22">750 mL</text>
+  <text x="300" y="560" text-anchor="middle" fill="#d4a373" font-family="Arial, sans-serif" font-size="12">Imported by</text>
+  <text x="300" y="585" text-anchor="middle" fill="#f5ebe0" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Casa Del Sol Imports Inc.</text>
+  <text x="300" y="610" text-anchor="middle" fill="#d4a373" font-family="Arial, sans-serif" font-size="12">Miami, Florida 33101</text>
+  <text x="300" y="640" text-anchor="middle" fill="#d4a373" font-family="Arial, sans-serif" font-size="12" font-weight="bold">Product of Mexico</text>
+  <!-- No government warning box  intentional FAIL (missing warning) -->
+  <text x="300" y="720" text-anchor="middle" fill="#a89060" font-family="Arial, sans-serif" font-size="11">Hecho en México</text>
+</svg>

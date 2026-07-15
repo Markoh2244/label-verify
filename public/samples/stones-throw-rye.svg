@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="600" height="800" viewBox="0 0 600 800">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1a2332"/>
+      <stop offset="100%" stop-color="#0d1219"/>
+    </linearGradient>
+  </defs>
+  <rect width="600" height="800" fill="url(#bg)"/>
+  <rect x="28" y="28" width="544" height="744" fill="none" stroke="#8fa8c8" stroke-width="2"/>
+  <text x="300" y="110" text-anchor="middle" fill="#8fa8c8" font-family="Georgia, serif" font-size="13" letter-spacing="5">SMALL BATCH</text>
+  <text x="300" y="200" text-anchor="middle" fill="#e8eef5" font-family="Georgia, serif" font-size="38" font-weight="bold">STONE'S THROW</text>
+  <text x="300" y="245" text-anchor="middle" fill="#8fa8c8" font-family="Georgia, serif" font-size="16" letter-spacing="4">DISTILLING CO.</text>
+  <line x1="160" y1="280" x2="440" y2="280" stroke="#8fa8c8" stroke-width="1"/>
+  <text x="300" y="325" text-anchor="middle" fill="#c5d4e5" font-family="Georgia, serif" font-size="18" font-style="italic">Straight Rye Whiskey</text>
+  <text x="300" y="400" text-anchor="middle" fill="#e8eef5" font-family="Arial, sans-serif" font-size="26" font-weight="bold">46% Alc./Vol.</text>
+  <text x="300" y="435" text-anchor="middle" fill="#8fa8c8" font-family="Arial, sans-serif" font-size="15">(92 Proof)</text>
+  <text x="300" y="500" text-anchor="middle" fill="#c5d4e5" font-family="Arial, sans-serif" font-size="22">750 mL</text>
+  <text x="300" y="560" text-anchor="middle" fill="#8fa8c8" font-family="Arial, sans-serif" font-size="12">Produced and Bottled by</text>
+  <text x="300" y="585" text-anchor="middle" fill="#e8eef5" font-family="Arial, sans-serif" font-size="14" font-weight="bold">Stone's Throw Distilling Co.</text>
+  <text x="300" y="610" text-anchor="middle" fill="#8fa8c8" font-family="Arial, sans-serif" font-size="12">Portland, Oregon 97214</text>
+  <text x="300" y="635" text-anchor="middle" fill="#8fa8c8" font-family="Arial, sans-serif" font-size="11">Product of USA</text>
+  <rect x="50" y="660" width="500" height="100" fill="#06080c"/>
+  <text x="300" y="685" text-anchor="middle" fill="#ffffff" font-family="Arial, sans-serif" font-size="9" font-weight="bold">
+    <tspan x="300" dy="0">GOVERNMENT WARNING: (1) According to the Surgeon General, women should not drink</tspan>
+    <tspan x="300" dy="12">alcoholic beverages during pregnancy because of the risk of birth defects. (2) Consumption</tspan>
+    <tspan x="300" dy="12">of alcoholic beverages impairs your ability to drive a car or operate machinery, and may</tspan>
+    <tspan x="300" dy="12">cause health problems.</tspan>
+  </text>
+</svg>
