@@ -163,7 +163,7 @@ function ProcessingIndicator({ current, total }: { current: number; total: numbe
           Analyzing label {current} of {total}
         </p>
         <p className="mt-1 text-sm text-[var(--base-dark)]">
-          Extracting text and comparing against application fields…
+          Reading label text in your browser, then comparing fields…
         </p>
         <div className="mt-4 h-2 overflow-hidden bg-[var(--primary-lightest)]">
           <div

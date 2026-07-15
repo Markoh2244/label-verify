@@ -91,32 +91,54 @@ export default function DashboardPage() {
     setResults([]);
     setCurrentIndex(0);
 
+    const { extractLabelInBrowser } = await import('@/lib/extract-browser');
     const newResults: VerificationResult[] = [];
 
     for (let i = 0; i < files.length; i++) {
       setCurrentIndex(i);
 
       try {
-        const base64 = await fileToBase64(files[i]);
+        const file = files[i];
+        const imageUrl = await fileToBase64(file);
+
+        // OCR in the browser — avoids Vercel serverless 504 timeouts
+        const extractedData = await extractLabelInBrowser(file);
+
+        // Only send the image when the server may run OpenAI (large payloads can fail on Vercel)
+        const serverVision =
+          process.env.NEXT_PUBLIC_VERIFICATION_ENGINE === 'openai' ||
+          process.env.NEXT_PUBLIC_VERIFICATION_ENGINE === 'auto';
 
         const response = await fetch('/api/verify', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            image: base64,
+            extractedData,
+            imageUrl,
+            ...(serverVision ? { image: imageUrl } : {}),
             applicationData,
-            fileName: files[i].name,
+            fileName: file.name,
             id: crypto.randomUUID(),
           }),
         });
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Verification failed');
+        const responseText = await response.text();
+        let payload: VerificationResult & { error?: string };
+        try {
+          payload = JSON.parse(responseText);
+        } catch {
+          throw new Error(
+            response.status === 504
+              ? 'Verification timed out on the server. OCR now runs in your browser—redeploy the latest build and try again.'
+              : `Verification failed (${response.status}): ${responseText.slice(0, 160) || 'Unknown error'}`
+          );
         }
 
-        const result = await response.json();
-        newResults.push(result);
+        if (!response.ok) {
+          throw new Error(payload.error || 'Verification failed');
+        }
+
+        newResults.push(payload);
         setResults([...newResults]);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Unknown error';

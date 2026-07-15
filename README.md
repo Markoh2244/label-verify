@@ -208,7 +208,15 @@ npm run build
 vercel deploy
 ```
 
-Defaults work with Tesseract only. For GPT-4o, set `OPENAI_API_KEY` and optionally `VERIFICATION_ENGINE=openai` or `auto` in the deployment environment.
+**Important (demo / Hobby plan):** Server-side Tesseract often hits Vercel’s **~10s function timeout** and returns **504**. This app runs **OCR in the browser** and uses `/api/verify` only for fast field comparison, so deploys work without an API key.
+
+For GPT-4o on Vercel, set:
+```
+OPENAI_API_KEY=...
+VERIFICATION_ENGINE=openai
+NEXT_PUBLIC_VERIFICATION_ENGINE=openai
+```
+(Pro plan recommended if server-side vision regularly exceeds Hobby limits.)
 
 ### Docker
 
