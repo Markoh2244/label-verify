@@ -153,7 +153,7 @@ This prototype defaults to **Tesseract.js** so reviewers can run and evaluate th
 - Harder to hit the stakeholder **~5 second** usability bar consistently on difficult labels
 
 **What a real-world budget would buy:**
-- Switching `VERIFICATION_ENGINE` to `openai` (or `auto`) with an `OPENAI_API_KEY` measurably improves field extraction and warning-statement checks
+- Switching `VERIFICATION_ENGINE` to `openai` (or `auto`) with an `OPENAI_API_KEY` may result in performance gains
 - With procurement funding, the same architecture could use other commercial or FedRAMP-minded vision APIs, or a self-hosted VLM (e.g. via Ollama / agency-approved hosting) to address the network/firewall concerns raised in discovery
 - Paid vision models are the clearer path to the accuracy and speed agents need day-to-day; free OCR is suitable for proving UX and workflow, not for replacing manual review at volume
 
